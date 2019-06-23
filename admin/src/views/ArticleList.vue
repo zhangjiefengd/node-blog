@@ -1,23 +1,40 @@
 <template>
   <div>
     <h1>文章列表</h1>
-    <el-table :data="items">
+    <el-table
+     :data="items"
+     border
+     :cell-class-name="fun"
+    >
       <el-table-column prop="_id" label="ID" width="220"></el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
+      <el-table-column prop="author[0].username" label="作者"></el-table-column>
+      <el-table-column prop="content" label="内容">
+      </el-table-column>
       <el-table-column
         fixed="right"
         label="操作"
         width="180">
       <template slot-scope="scope">
-        <el-button type="text" size="small"
+        <el-button size="small"
           @click="$router.push(`/articles/edit/${scope.row._id}`)">编辑</el-button>
-        <el-button type="text" size="small"
+        <el-button size="small"
+          type="danger"
           @click="remove(scope.row)">删除</el-button>
       </template>
     </el-table-column>
     </el-table>
   </div>
 </template>
+<style>
+.text_overflow .cell{
+  height: 23px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+</style>
+
 <script>
 export default {
   data() {
@@ -48,6 +65,10 @@ export default {
           });
           this.fetch()
         })
+    },
+    fun() {
+      if (arguments[0].hasOwnProperty('columnIndex') && arguments[0].columnIndex === 4) return 
+      return 'text_overflow'
     }
   },
 }

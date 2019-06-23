@@ -31,6 +31,8 @@ module.exports = app => {
     const queryOptions = {}
     if (req.Model.modelName === 'Category') {
       queryOptions.populate = 'parent'
+    } else if (req.Model.modelName === 'Article') {
+      queryOptions.populate = 'author'
     }
     const items = await req.Model.find().setOptions(queryOptions).limit(10)
     res.send(items)
