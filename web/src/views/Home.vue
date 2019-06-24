@@ -1,18 +1,16 @@
 <template>
   <div id="Home">
-    <home-nav></home-nav>
-    <articles></articles>
+    <all-nav></all-nav>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Articles from '../components/Articles'
-import HomeNav from '../components/HomeNav'
+import AllNav from '../components/Nav'
 export default {
   name: 'Home',
   components: {
-    Articles,
-    HomeNav
+    AllNav
   },
   data() {
     return {

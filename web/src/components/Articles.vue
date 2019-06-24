@@ -24,15 +24,16 @@
       class="article-page">
       <el-pagination
         @current-change="currentChange"
-        :current-page.sync="page"
+        :current-page.sync="page.number"
         layout="prev, pager, next, jumper"
-        :page-size="10"
-        :total="100">
+        :page-size.sync="page.pageSize"
+        hide-on-single-page
+        :current-change="currentChange"
+        :total="page.total">
       </el-pagination>
     </el-row>
   </div>
 </template>
-
 <script>
 export default {
   name: 'articles',
@@ -40,24 +41,24 @@ export default {
     return {
       individual: {},
       articles: [],
-      page: 1
+      page: {
+        number: 1,
+        pageSize: 1,
+        total: 1
+      }
     }
   },
   created() {
-    this.fetch()
+    this.fetch(this.page.number)
   },
   methods: {
-    async fetch() {
-      const res = await this.$http.get('articles')
-      this.articles = res.data
+    async fetch(number) {
+      const res = await this.$http.get(`articles?number=${number}`)
+      this.articles = res.data.articles
+      this.page = res.data.page
     },
-    currentChange() {
-      return this.page
-    }
-  },
-  watch: {
-    page(val) {
-      console.log(val)
+    currentChange(val) {
+      this.fetch(val)
     }
   },
 }

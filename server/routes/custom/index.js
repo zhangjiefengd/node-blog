@@ -4,8 +4,15 @@ module.exports = app => {
   const Category = require('../../models/Category')
   
   app.get('/articles', async (req, res) => {
-    const articles = await Article.find().populate('author').populate('categories').exec()
-    res.send(articles)
+    const page = {
+      pageSize: 5,
+      total: Number,
+      number: Number(req.query.number)
+    }
+    const articles = await Article.find().populate('author').populate('categories').skip((req.query.number-1) * page.pageSize).limit(page.pageSize)
+    page.total = await Article.find().count()
+    
+    res.send({articles, page})
   })
 
   app.get('/article/:id', async (req, res) => {
